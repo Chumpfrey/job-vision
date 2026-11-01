@@ -6,3 +6,9 @@
 ### https://www.geeksforgeeks.org/python/text-detection-and-extraction-using-opencv-and-ocr/ 
 ## PIL ImageGrab
 ### https://pillow.readthedocs.io/en/stable/reference/ImageGrab.html
+## Python GUI recommendations
+### https://www.pythonguis.com/faq/which-python-gui-library/#quick-recommendations
+## PySide6 documentation
+### https://doc.qt.io/qtforpython-6/gettingstarted.html
+## PySide6 layouts
+### https://doc.qt.io/qtforpython-6/examples/example_widgets_layouts_basiclayouts.html
