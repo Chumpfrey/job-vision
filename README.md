@@ -1,5 +1,5 @@
 # Description
-## This application aims to help job seekers by keeping track of and flagging companies you already sent an application to. Users can add company names to a table and the application with attempt to locate and highlight them on screen.
+## This application aims to help job seekers by keeping track of and flagging companies you've already applied to. Users can add company names to a table and the application will attempt to locate and highlight them on screen.
 
 # Sources
 ## Python text detection lib
