@@ -12,3 +12,5 @@
 ### https://doc.qt.io/qtforpython-6/gettingstarted.html
 ## PySide6 layouts
 ### https://doc.qt.io/qtforpython-6/examples/example_widgets_layouts_basiclayouts.html
+## Python files
+### https://www.w3schools.com/python/python_file_write.asp
