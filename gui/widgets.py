@@ -67,14 +67,35 @@ class CSVView(QtWidgets.QWidget):
         self.setLayout(vertical_layout)
     
     def export_csv(self):
-        pass
+        dir_dialog = QFileDialog()
+        dir_dialog.setAcceptMode(QFileDialog.AcceptMode.AcceptSave)
+        dir_dialog.setNameFilter("CSV File (*.csv)")
+        if dir_dialog.exec():
+            file_name = dir_dialog.selectedFiles()
+            with open(file_name[0], "wt", newline='') as f:
+                writer = csv.writer(f)
+                for row in range(self.csv_widget.rowCount() - 1):
+                    if (self.csv_widget.item(row, 0) is not None):
+                        writer.writerow([self.csv_widget.item(row, 0).text()])
+                f.close()
 
     def import_csv(self):
         dir_dialog = QFileDialog()
+        dir_dialog.setFileMode(QFileDialog.FileMode.ExistingFile)
+        dir_dialog.setNameFilter("CSV Files (*.csv)")
         if dir_dialog.exec():
             file_name = dir_dialog.selectedFiles()
-        self.csv_widget.clearContents()
-        
+            self.csv_widget.clearContents()
+            with open(file_name[0], "rt") as f:
+                row = 0
+                reader = csv.reader(f)
+                for line in reader:
+                    item = QtWidgets.QTableWidgetItem(line[0])
+                    self.csv_widget.setItem(row, 0, item)
+                    row += 1
+                    self.csv_widget.expand_row()
+                f.close()
+            
     def reset_csv(self):
         assurance = QMessageBox(self)
         assurance.setWindowTitle("Reset")
