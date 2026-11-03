@@ -1,5 +1,6 @@
-import csv
-import random
+import csv, random, threading
+
+from processing.ocr import ProcessImg
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QPushButton, QWidget
 
@@ -106,32 +107,31 @@ class CSVView(QtWidgets.QWidget):
         match ret:
             case QMessageBox.Reset:
                 self.csv_widget.clearContents()
-            
-
-class MyWidget(QtWidgets.QWidget):
+                              
+                
+class OverlayWidget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         
-        self.hello = ["Hello World", "Goodbye", "Nope"]
-        
-        self.button = QtWidgets.QPushButton("Click")
-        self.text = QtWidgets.QLabel("Hello World",
-                                     alignment=QtCore.Qt.AlignCenter)
         self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(self.text)
-        self.layout.addWidget(self.button)
-        self.button.clicked.connect(self.magic)
-    
-    @QtCore.Slot()
-    def magic(self):
-        self.text.setText(random.choice(self.hello))
         
+        self.activate_button = QtWidgets.QPushButton("Activate Overlay")
+        self.activate_button.setCheckable(True)
+        self.activate_button.toggled.connect(self.activate_overlay)
+        
+        self.layout.addWidget(self.activate_button)
+        
+    def activate_overlay(self):
+        activate = self.activate_button.isChecked()
+        process_img = ProcessImg()
+        process_img.launch_thread(activate)
+            
         
 class CentralWidget(QtWidgets.QTabWidget):
     def __init__(self):
         super().__init__()
         
-        self.addTab(MyWidget(), "Test")
+        self.addTab(OverlayWidget(), "Overlay")
         self.addTab(CSVView(), "Companies")
         
 
@@ -140,5 +140,7 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
         
         self.setCentralWidget(CentralWidget())
+        self.setWindowTitle("Job Vision")
+        
     
         

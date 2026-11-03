@@ -16,3 +16,5 @@
 ### https://www.w3schools.com/python/python_file_write.asp
 ## Python CSV handling
 ### https://docs.python.org/3/library/csv.html
+## Thread event
+### https://stackoverflow.com/questions/69107143/how-to-end-a-while-loop-in-another-thread
