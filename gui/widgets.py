@@ -1,8 +1,8 @@
-import csv, random, threading
-
 from processing.ocr import ProcessImg
-from PySide6 import QtCore, QtWidgets
+from PySide6 import QtWidgets
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QPushButton, QWidget
+
+import csv
 
 
 class CSVWidget(QtWidgets.QTableWidget):
@@ -113,6 +113,8 @@ class OverlayWidget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         
+        self.process_img = ProcessImg()
+        
         self.layout = QtWidgets.QVBoxLayout(self)
         
         self.activate_button = QtWidgets.QPushButton("Activate Overlay")
@@ -123,24 +125,25 @@ class OverlayWidget(QtWidgets.QWidget):
         
     def activate_overlay(self):
         activate = self.activate_button.isChecked()
-        process_img = ProcessImg()
-        process_img.launch_thread(activate)
+        self.process_img.launch_thread(activate)
+    
+    def kill_thread_on_close(self):
+        self.process_img.kill_thread()
             
         
 class CentralWidget(QtWidgets.QTabWidget):
     def __init__(self):
         super().__init__()
         
-        self.addTab(OverlayWidget(), "Overlay")
-        self.addTab(CSVView(), "Companies")
+        self.overlay_widget = OverlayWidget()
+        self.csv_view = CSVView()
         
-
-class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self):
-        super().__init__()
+        self.addTab(self.overlay_widget, "Overlay")
+        self.addTab(self.csv_view, "Companies")
         
-        self.setCentralWidget(CentralWidget())
-        self.setWindowTitle("Job Vision")
+    def kill_thread_on_close(self):
+        self.overlay_widget.kill_thread_on_close()
+    
         
     
         
