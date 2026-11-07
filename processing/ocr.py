@@ -2,7 +2,7 @@ from gui.overlay import Overlay
 from PIL import ImageGrab
 from threading import Event
 
-import cv2, pytesseract, time, threading
+import cv2, pytesseract, threading, time
 
 
 class ProcessImg():
@@ -17,8 +17,11 @@ class ProcessImg():
     
     def grab_screen(self):  
         while not self.exit_thread.is_set():
-            screenshot = ImageGrab.grab();
-            screenshot.save(self.img_path)
+            self.overlay.clear_flag = 1
+            self.overlay.update() # Clears the overlay for clean screen capture
+            time.sleep(0.5) # Grace period for screen grab
+            screenshot = ImageGrab.grab()
+            screenshot.save(self.img_path, quality=100)
             img = cv2.imread(self.img_path)
             img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             data = pytesseract.image_to_data(img_rgb, output_type=pytesseract.Output.DICT)
