@@ -24,10 +24,10 @@
 ### https://doc.qt.io/qtforpython-6/PySide6/QtCore/Qt.html#PySide6.QtCore.Qt.ApplicationAttribute
 ## PySide6 transparent widget
 ### https://stackoverflow.com/questions/79178630/how-to-make-transparent-but-clickable-window
+## PySide6 hide window in taskbar
+### https://stackoverflow.com/questions/4044994/hide-pyqt-app-from-taskbar
 
 # To-do
-## Make overlay border transparent
-## Make overlay window unable to be seen when hovering application in taskbar
 ## Fix occasional issue where the ocr is unable to detect a word for some reason
 ## Allow user to choose which monitor to watch
 ## Remove hard-coded overlay resolution and allow it to be dynamic based on different monitor resolutions

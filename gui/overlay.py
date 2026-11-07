@@ -17,9 +17,9 @@ class Overlay(QWidget):
         self.clear_flag = 0
         self.first_paint = 1 # Flag to prevent rectangles on initialization paintEvent
         self.setWindowTitle("Overlay")
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | QtCore.Qt.Tool)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setStyleSheet('background-color: transparent;')
+        self.setStyleSheet('background-color: transparent; border: none;')
         
         self.stuff = QTextEdit()
         layout = QtWidgets.QVBoxLayout()
