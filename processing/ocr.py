@@ -7,6 +7,7 @@ import cv2, os, pytesseract, threading, time
 
 class ProcessImg():
     def __init__(self):
+        pytesseract.pytesseract.tesseract_cmd = r'./Tesseract-OCR/tesseract.exe'
         self.img_path = "screengrabs/view.png"
         try:
             os.mkdir("screengrabs")

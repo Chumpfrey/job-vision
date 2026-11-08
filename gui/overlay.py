@@ -5,7 +5,7 @@ from PySide6.QtCore import Signal, Qt
 from PySide6.QtGui import QPainter
 from PySide6 import QtGui, QtCore
 
-import csv
+import csv, os.path
 
 
 class Overlay(QWidget):
@@ -33,48 +33,48 @@ class Overlay(QWidget):
     # Data dictionary contains block_num, conf, height, left, level, line_num, page_num, par_num, text, top, width
     # and block num
     def highlight_area(self, data):
-        #self.stuff.setText(json.dumps(text)) # Note to self: remove placeholder and implement actual highlighting mechanics
-        with open("companies.csv", "rt") as f:
-            row = 0
-            reader = csv.reader(f)
-            for line in reader:
-                if line[0] != "":
-                    self.companies.append(line[0])
-                    row += 1
-            f.close()
-        
-        self.screen_data = {
-            "block_num": [],
-            "conf": [],
-            "height": [],
-            "left": [],
-            "level": [],
-            "line_num": [],
-            "page_num": [],
-            "par_num": [],
-            "text": [],
-            "top": [],
-            "width": []                       
-        }
-        
-        # Clears out all empty strings
-        for i in range(len(data["text"])):
-            if data["text"][i].replace(" ", "") != "":
-                self.screen_data["block_num"].append(data["block_num"][i])
-                self.screen_data["conf"].append(data["conf"][i])
-                self.screen_data["height"].append(data["height"][i])
-                self.screen_data["left"].append(data["left"][i])
-                self.screen_data["level"].append(data["level"][i])
-                self.screen_data["line_num"].append(data["line_num"][i])
-                self.screen_data["page_num"].append(data["page_num"][i])
-                self.screen_data["par_num"].append(data["par_num"][i])
-                self.screen_data["text"].append(data["text"][i])
-                self.screen_data["top"].append(data["top"][i])
-                self.screen_data["width"].append(data["width"][i])
-                
-        print(self.screen_data)
-        self.first_paint = 0
-        self.repaint()
+        filename = "companies.csv"
+        if os.path.isfile(filename):
+            with open(filename, "rt") as f:
+                row = 0
+                reader = csv.reader(f)
+                for line in reader:
+                    if line[0] != "":
+                        self.companies.append(line[0])
+                        row += 1
+                f.close()
+            
+            self.screen_data = {
+                "block_num": [],
+                "conf": [],
+                "height": [],
+                "left": [],
+                "level": [],
+                "line_num": [],
+                "page_num": [],
+                "par_num": [],
+                "text": [],
+                "top": [],
+                "width": []                       
+            }
+            
+            # Clears out all empty strings
+            for i in range(len(data["text"])):
+                if data["text"][i].replace(" ", "") != "":
+                    self.screen_data["block_num"].append(data["block_num"][i])
+                    self.screen_data["conf"].append(data["conf"][i])
+                    self.screen_data["height"].append(data["height"][i])
+                    self.screen_data["left"].append(data["left"][i])
+                    self.screen_data["level"].append(data["level"][i])
+                    self.screen_data["line_num"].append(data["line_num"][i])
+                    self.screen_data["page_num"].append(data["page_num"][i])
+                    self.screen_data["par_num"].append(data["par_num"][i])
+                    self.screen_data["text"].append(data["text"][i])
+                    self.screen_data["top"].append(data["top"][i])
+                    self.screen_data["width"].append(data["width"][i])
+                    
+            self.first_paint = 0
+            self.repaint()
 
     def paintEvent(self, event:QtGui.QPaintEvent):
         highlight = QtGui.QColor(50, 125, 255, 70)
