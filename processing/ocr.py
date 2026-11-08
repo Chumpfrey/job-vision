@@ -1,13 +1,17 @@
 from gui.overlay import Overlay
-from PIL import ImageGrab
+from PIL import ImageGrab, Image
 from threading import Event
 
-import cv2, pytesseract, threading, time
+import cv2, os, pytesseract, threading, time
 
 
 class ProcessImg():
     def __init__(self):
         self.img_path = "screengrabs/view.png"
+        try:
+            os.mkdir("screengrabs")
+        except FileExistsError:
+            pass
         self.exit_thread = Event()
         self.overlay = Overlay()
         self.overlay.change_ui.connect(self.test)

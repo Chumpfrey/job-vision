@@ -25,7 +25,9 @@ class Overlay(QWidget):
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.stuff)
         self.setLayout(layout)
-        self.resize(1920, 1080) # Note to self: change hard-coded resolution to dynamic resolution
+        height = self.screen().size().height()
+        width = self.screen().size().width()
+        self.resize(width, height) # Note to self: change hard-coded resolution to dynamic resolution
         self.show()
 
     # Data dictionary contains block_num, conf, height, left, level, line_num, page_num, par_num, text, top, width
@@ -40,45 +42,77 @@ class Overlay(QWidget):
                     self.companies.append(line[0])
                     row += 1
             f.close()
-        self.screen_data = data
+        
+        self.screen_data = {
+            "block_num": [],
+            "conf": [],
+            "height": [],
+            "left": [],
+            "level": [],
+            "line_num": [],
+            "page_num": [],
+            "par_num": [],
+            "text": [],
+            "top": [],
+            "width": []                       
+        }
+        
+        # Clears out all empty strings
+        for i in range(len(data["text"])):
+            if data["text"][i].replace(" ", "") != "":
+                self.screen_data["block_num"].append(data["block_num"][i])
+                self.screen_data["conf"].append(data["conf"][i])
+                self.screen_data["height"].append(data["height"][i])
+                self.screen_data["left"].append(data["left"][i])
+                self.screen_data["level"].append(data["level"][i])
+                self.screen_data["line_num"].append(data["line_num"][i])
+                self.screen_data["page_num"].append(data["page_num"][i])
+                self.screen_data["par_num"].append(data["par_num"][i])
+                self.screen_data["text"].append(data["text"][i])
+                self.screen_data["top"].append(data["top"][i])
+                self.screen_data["width"].append(data["width"][i])
+                
+        print(self.screen_data)
         self.first_paint = 0
         self.repaint()
 
     def paintEvent(self, event:QtGui.QPaintEvent):
+        highlight = QtGui.QColor(50, 125, 255, 70)
         if not self.first_paint and not self.clear_flag:
             self.painter = QPainter()
             self.painter.begin(self)
-            for i in range(len(self.screen_data["text"])):
-                for company in self.companies:
+            connected_rects = []
+            for company in self.companies:
+                for i in range(len(self.screen_data["text"])):
                     words = company.split()
+                    
+                    # Processes company names that are a single word
                     if len(words) <= 1 and str.lower(self.screen_data["text"][i]) == str.lower(company):
                         rect = QtCore.QRect(self.screen_data["left"][i], self.screen_data["top"][i], self.screen_data["width"][i], self.screen_data["height"][i])
-                        self.painter.fillRect(rect, Qt.GlobalColor.yellow)
+                        self.painter.fillRect(rect, highlight)
+                        self.painter.fillRect
                         self.painter.drawRect(rect)
+                        
+                    # Processes company names that are multiple words
                     elif len(words) > 1:
-                        for word in words:
-                            if str.lower(self.screen_data["text"][i]) == str.lower(word):
+                        for j in range(len(words)):
+                            # Take note of words that might be a part of a company name
+                            if str.lower(self.screen_data["text"][i]) == str.lower(words[j]):
                                 rect = QtCore.QRect(self.screen_data["left"][i], self.screen_data["top"][i], self.screen_data["width"][i], self.screen_data["height"][i])
-                                self.painter.fillRect(rect, Qt.GlobalColor.yellow)
-                                self.painter.drawRect(rect)
-            """for company in self.companies:
-                words = company.split()
-                for word in words:
-                    for i in range(len(self.screen_data["text"])):
-                        if len(words) <= 1 and str.lower(self.screen_data["text"][i]) == str.lower(word):
-                            rect = QtCore.QRect(self.screen_data["left"][i], self.screen_data["top"][i], self.screen_data["width"][i], self.screen_data["height"][i])
-                            self.painter.fillRect(rect, Qt.GlobalColor.yellow)
-                            self.painter.drawRect(rect)
-                        elif len(words) > 1:
-                            if str.lower(self.screen_data["text"][i]) == str.lower(word):
-                                rect = QtCore.QRect(self.screen_data["left"][i], self.screen_data["top"][i], self.screen_data["width"][i], self.screen_data["height"][i])
-                                rects.append(rect)
-                            else:
-                                rects.clear()
+                                connected_rects.append(rect)
                                 break
-                for rect in rects:
-                    self.painter.fillRect(rect, Qt.GlobalColor.yellow)
-                    self.painter.drawRect(rect)"""
+                            
+                            # If found company names don't match table, throw highlight sequence away
+                            if j == len(words) - 1 and words[j] != words[len(words) - 1]:
+                                connected_rects.clear()
+
+                        if len(words) == len(connected_rects):
+                            prev_rect = QtCore.QRect(0, 0, 0, 0)
+                            for rect in connected_rects:
+                                self.painter.fillRect(rect, highlight)
+                                self.painter.drawRect(rect)
+                            connected_rects.clear()    
+                            
             self.painter.end()
             
         self.clear_flag = 0

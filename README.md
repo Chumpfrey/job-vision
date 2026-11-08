@@ -28,7 +28,7 @@
 ### https://stackoverflow.com/questions/4044994/hide-pyqt-app-from-taskbar
 
 # To-do
-## Fix occasional issue where the ocr is unable to detect a word for some reason
+## Fix occasional issue where smaller texts remain undetected by the ocr
 ## Allow user to choose which monitor to watch
-## Remove hard-coded overlay resolution and allow it to be dynamic based on different monitor resolutions
 ## Fix issue where companies are searched for piece-wise. "Lambda Corporation" will make the application search for "Lambda" and "Corporation" instead of the full name.
+## Let user choose rectange highlight color

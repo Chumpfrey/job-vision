@@ -7,8 +7,8 @@ import csv
 
 class CSVWidget(QtWidgets.QTableWidget):
     def __init__(self):
+        super().__init__(1, 1)
         try: 
-            super().__init__(1, 1)
             with open("companies.csv", "rt") as f:
                 row = 0
                 reader = csv.reader(f)
@@ -18,8 +18,9 @@ class CSVWidget(QtWidgets.QTableWidget):
                     self.setItem(row, 0, item)
                     row += 1
                     self.expand_row()
+                f.close()
         except:
-            super().__init__(10, 1)
+            pass
             
         self.setColumnWidth(0, 200)
         self.cellChanged.connect(self.expand_row)
